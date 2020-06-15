@@ -11,6 +11,9 @@ timeTotal.innerHTML = timeLeft + " seconds remaining"
 var qIndex = 0; 
 
 // Get Element ID's
+var viewHighScores = document.getElementById("view-high-scores");
+var highScoreData = document.getElementById("high-score-data");
+var scoreList = document.querySelectorAll(".score-list");
 var codeTitle = document.getElementById("code-title");
 var quizSection = document.getElementById("quiz-section");
 var questionTitle = document.getElementById("quiz-title");
@@ -54,9 +57,34 @@ var questionArr = [{
     answer: "",
 }];
 
+// High score data vars
+var scoreData = {
+    initials: [],
+    highscore: [],
+};
+
+var oldScoreData = JSON.parse(localStorage.getItem("scoreData"));
+
+// Trying to add on every score and initial for some reason wont add more than 2 at a time
+function saveScores(scoreData) {
+    if (oldScoreData) {
+        oldScoreData.initials.push(scoreData.initials[0]);
+        oldScoreData.highscore.push(scoreData.highscore[0]);
+        localStorage.setItem("scoreData", JSON.stringify(scoreData));
+    } else {
+        localStorage.setItem("scoreData", JSON.stringify(scoreData));
+    }
+};
+
+function loadScores() {
+    console.log(scoreData)
+};
+
+highScoreData.setAttribute("style", "display: none");
+
 for (var i = 0; i < choiceButton.length; ++i) {
     choiceButton[i].addEventListener('click', nextClick);
-    choiceButton[i].setAttribute("style", "visibility: hidden");
+    choiceButton[i].setAttribute("style", "display: none");
 };
 
 var startClick = startButton.onclick = function() {
@@ -66,12 +94,36 @@ var startClick = startButton.onclick = function() {
         if(timeLeft < 1 || qIndex == 5){
             clearInterval(timeInterval);
             for (var i = 0; i < choiceButton.length; ++i) {
-                choiceButton[i].setAttribute("style", "visibility: hidden");
+                choiceButton[i].setAttribute("style", "display: none");
             };
-            var highscore = timeLeft;
+            // Freeze time and remove some elements
             timer.remove();
+            quizSection.removeChild(question);
             resultSection.innerHTML = "";
-            codeTitle.innerHTML = "Your score is " + highscore + " points!";
+            
+            // Get score at finished time and display
+            var score = timeLeft;
+            codeTitle.innerHTML = "Your score is " + score + "!";
+            
+            // Create input and submit buttons
+            questionTitle.innerHTML = "Enter your initials:";
+            var initialInput = document.createElement("input");
+            var inputSubmit = document.createElement("button");
+            inputSubmit.innerHTML = "Submit";
+            quizSection.appendChild(initialInput);
+            quizSection.appendChild(inputSubmit);
+            
+            // Append initials and score data to scoreData array
+            inputSubmit.addEventListener("click", function(){
+                scoreData.initials.push(initialInput.value);
+                scoreData.highscore.push(score);
+                saveScores(scoreData);
+
+                initialInput.setAttribute("style", "display: none");
+                inputSubmit.setAttribute("style", "display: none");
+                questionTitle.innerHTML = "";
+                codeTitle.innerHTML = "Thanks for taking my quiz!";
+            })
         } else {
             timeTotal.innerHTML = timeLeft + " seconds remaining";
         }
@@ -81,7 +133,7 @@ var startClick = startButton.onclick = function() {
     quizSection.removeChild(startButton);
 
     for (var i = 0; i < choiceButton.length; ++i) {
-        choiceButton[i].setAttribute("style", "visibility: visible");
+        choiceButton[i].setAttribute("style", "display: block");
     };
 
     quizUpdate(questionArr[0]);
@@ -121,3 +173,23 @@ function nextClick(e) {
 
     quizUpdate(questionArr[qIndex], currentCheck);
 };
+
+// View highscores button
+viewHighScores.addEventListener("click", function() {
+    quizSection.setAttribute("style", "display: none");
+    highScoreData.setAttribute("style", "display: block");
+    timeTotal.innerHTML = ""
+    codeTitle.innerHTML = "Highscore Leaderboard"
+    var goBack = document.createElement("button");
+    codeTitle.appendChild(goBack);
+    goBack.innerHTML = "Go Back";
+
+    goBack.addEventListener("click", function(){
+        function newDoc() {
+        window.location.assign("file:///C:/Users/user/Desktop/js-code-quiz/index.html")}
+        newDoc()
+    });
+
+    scoreList[0].innerHTML = oldScoreData.initials[0] + " - " + oldScoreData.highscore[0] + " points";
+    scoreList[1].innerHTML = oldScoreData.initials[1] + " - " + oldScoreData.highscore[1] + " points";
+});
