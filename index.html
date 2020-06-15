@@ -7,22 +7,27 @@
         <title>Document</title>
     </head>
     <body>
-        <header>
-            <h2 href="#">View High Score</h2>
+        <header id="header">
+            <h2 href="#">View High Scores</h2>
             <div id="timer" value="0"></div>
         </header>
 
         <main>
-            <h1>JavaScript Code Quiz</h1>
-            <section id="quiz-area">
-                <h3 id="quiz-header">Start the Quiz</h3>
-                <p id="question">
+            <h1 id="code-title">JavaScript Code Quiz</h1>
+            <section id="quiz-section" class="entire-quiz">
+                <h3 id="quiz-title" class="quiz-title">Start the Quiz</h3>
+                <p id="question" class="question-paragraph">
                     There are 3 questions in the quiz and your final score will 
                     be calculated by seconds left when the quiz is finished. 
                     Every wrong answer will subtract 10 seconds from your time! 
                     You have 3 minutes, good luck!
                 </p>
                 <button id="start">Start the Quiz!</button>
+                <button id="choice1" class="choice"></button>
+                <button id="choice2" class="choice"></button>
+                <button id="choice3" class="choice"></button>
+                <button id="choice4" class="choice"></button>
+                <div id="result" class="result"></div>
             </section>
         </main>
         <script src="assets/js/script.js"></script>
