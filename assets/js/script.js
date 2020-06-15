@@ -186,7 +186,7 @@ viewHighScores.addEventListener("click", function() {
 
     goBack.addEventListener("click", function(){
         function newDoc() {
-        window.location.assign("file:///C:/Users/user/Desktop/js-code-quiz/index.html")}
+        window.location.assign("https://scotitakura.github.io/JS-Code-Quiz/")}
         newDoc()
     });
 
