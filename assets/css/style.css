@@ -1,0 +1,16 @@
+.body {
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+.view-high-scores {
+    font-size: small;
+}
+.entire-quiz {
+    text-align: center;
+}
+.choice {
+    margin: 20px;
+    margin-left: 20%;
+    margin-right: 20%
+}
