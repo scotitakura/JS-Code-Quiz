@@ -57,23 +57,27 @@ var questionArr = [{
     answer: "",
 }];
 
-// High score data vars
-var scoreData = {
-    initials: [],
-    highscore: [],
-};
+// var oldScoreData = JSON.parse(localStorage.getItem("scoreData"));
 
-var oldScoreData = JSON.parse(localStorage.getItem("scoreData"));
-
-// Trying to add on every score and initial for some reason wont add more than 2 at a time
-function saveScores(scoreData) {
-    if (oldScoreData) {
-        oldScoreData.initials.push(scoreData.initials[0]);
-        oldScoreData.highscore.push(scoreData.highscore[0]);
-        localStorage.setItem("scoreData", JSON.stringify(scoreData));
-    } else {
-        localStorage.setItem("scoreData", JSON.stringify(scoreData));
+// Adding on every score and initial to an array in localStorage
+function saveScores(initials, highscore) {
+    var oldScoreData = JSON.parse(localStorage.getItem("scoreData"));
+    if (!oldScoreData) {
+        oldScoreData = {
+            initials: [],
+            highscore: [],
+        };
     }
+    oldScoreData.initials.push(initials);
+    oldScoreData.highscore.push(highscore);
+    localStorage.setItem("scoreData", JSON.stringify(oldScoreData));
+
+    // Highscore board 
+    scoreList[0].innerHTML = oldScoreData.initials[0] + " - " + oldScoreData.highscore[0] + " points";
+    scoreList[1].innerHTML = oldScoreData.initials[1] + " - " + oldScoreData.highscore[1] + " points";
+    scoreList[2].innerHTML = oldScoreData.initials[2] + " - " + oldScoreData.highscore[2] + " points";
+    scoreList[3].innerHTML = oldScoreData.initials[3] + " - " + oldScoreData.highscore[3] + " points";
+    scoreList[4].innerHTML = oldScoreData.initials[4] + " - " + oldScoreData.highscore[4] + " points";
 };
 
 function loadScores() {
@@ -115,9 +119,7 @@ var startClick = startButton.onclick = function() {
             
             // Append initials and score data to scoreData array
             inputSubmit.addEventListener("click", function(){
-                scoreData.initials.push(initialInput.value);
-                scoreData.highscore.push(score);
-                saveScores(scoreData);
+                saveScores(initialInput.value, score);
 
                 initialInput.setAttribute("style", "display: none");
                 inputSubmit.setAttribute("style", "display: none");
@@ -179,7 +181,7 @@ viewHighScores.addEventListener("click", function() {
     quizSection.setAttribute("style", "display: none");
     highScoreData.setAttribute("style", "display: block");
     timeTotal.innerHTML = ""
-    codeTitle.innerHTML = "Highscore Leaderboard"
+    codeTitle.innerHTML = "Score Board"
     var goBack = document.createElement("button");
     codeTitle.appendChild(goBack);
     goBack.innerHTML = "Go Back";
@@ -189,7 +191,4 @@ viewHighScores.addEventListener("click", function() {
         window.location.assign("https://scotitakura.github.io/JS-Code-Quiz/")}
         newDoc()
     });
-
-    scoreList[0].innerHTML = oldScoreData.initials[0] + " - " + oldScoreData.highscore[0] + " points";
-    scoreList[1].innerHTML = oldScoreData.initials[1] + " - " + oldScoreData.highscore[1] + " points";
 });
